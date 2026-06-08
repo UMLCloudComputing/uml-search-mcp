@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mcp
+  labels:
+    pod-security.kubernetes.io/enforce: baseline # Change if needed
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uml-search-mcp-deployment
+  namespace: mcp
+spec:
+  replicas: 3 # Adjust to your needs
+  selector: 
+    matchLabels:
+      pod: uml-search-mcp
+  template:
+    metadata:
+      labels:
+        pod: uml-search-mcp
+    spec:
+      containers:
+        - image: ghcr.io/umlcloudcomputing/uml-search-mcp:latest # Pin to a specific version if needed
+          name: uml-search-mcp
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: uml-search-mcp-svc
+  namespace: mcp
+spec:
+  selector:
+    pod: uml-search-mcp
+  internalTrafficPolicy: Cluster
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800 # 3 Hours
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
