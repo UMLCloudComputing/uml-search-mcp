@@ -5,6 +5,14 @@ metadata:
   labels:
     pod-security.kubernetes.io/enforce: baseline # Change if needed
 ---
+apiVersion: v1
+kind: ConfigMap
+name: uml-search-mcp-configmap
+metadata:
+  namespace: mcp
+data:  
+  DOCLING_BASE_ADDRESS: "192.168.1.207:5001"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,6 +31,9 @@ spec:
       containers:
         - image: ghcr.io/umlcloudcomputing/uml-search-mcp:latest # Pin to a specific version if needed
           name: uml-search-mcp
+          envFrom:
+            - configMapRef:
+              name: uml-search-mcp-configmap
           ports:
             - containerPort: 8000
           readinessProbe:
