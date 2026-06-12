@@ -6,9 +6,6 @@ import os
 import httpx
 import logging
 from playwright.async_api import async_playwright
-from bs4 import BeautifulSoup
-
-DOCLING_BASE_URL = os.getenv("DOCLING_BASE_URL")
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +21,7 @@ async def get_html(url):
     return html
 
 
-async def process_url(client: httpx.AsyncClient, url: str):
+async def process_url(client: httpx.AsyncClient, url: str, docling_base_address: str):
     """
     Processes a URL into markdown data using Docling
     """
@@ -32,25 +29,25 @@ async def process_url(client: httpx.AsyncClient, url: str):
         "options": {
             "from_formats": ["html"],
             "to_formats": ["md"],
-            "table_mode": "accurate",
             "pipeline": "standard",
             "do_table_structure": "true",
         },
         "sources": [{"url": url, "kind": "http"}],
-        "target": "inbody",
     }
+
     logger.debug("Making URL processing request to Docling...")
     response = await client.post(
-        f"http://{DOCLING_BASE_URL}/v1/convert/source", payload
+        f"http://{docling_base_address}/v1/convert/source", json=payload
     )
 
-    if response.status == 200:
-        if response["status"] == "success":
+    if response.status_code == 200:
+        content = response.json()
+        if content["status"] == "success":
             logger.debug("Docling response successfully processed")
-            return response["document"].get("md_content")
+            return content["document"].get("md_content")
         else:
-            logger.error(f"Docling failed to process the url: {response['errors']}")
+            logger.error(f"Docling failed to process the url: {content['errors']}")
             return ""
     else:
-        logger.error(f"Error in docling response: status code: {response.status}")
+        logger.error(f"Error in docling response: status code: {response.status_code}")
         return ""
