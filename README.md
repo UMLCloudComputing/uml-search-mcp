@@ -12,7 +12,7 @@ The MCP server can be used locally by either
   - Accessible at `0.0.0.0:8000/mcp` or `localhost:8000/mcp` locally
 
 > [!NOTE]
-> If you're using the MCP Inspector tool for local development, uml-now-mcp uses the Streamable HTTP transport, not STDIO or server-sent events (SSE).
+> If you're using the MCP Inspector tool for local development, uml-search-mcp uses the Streamable HTTP transport, not STDIO or server-sent events (SSE).
 
 ## ☸ Kubernetes
 
