@@ -33,7 +33,7 @@ spec:
           name: uml-search-mcp
           envFrom:
             - configMapRef:
-              name: uml-search-mcp-configmap
+                name: uml-search-mcp-configmap
           ports:
             - containerPort: 8000
           readinessProbe:
