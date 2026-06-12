@@ -77,6 +77,7 @@ async def search_uml_places(
     return results
 
 
+# DONE
 @mcp_server.tool()
 async def search_uml_news(
     query: Annotated[str, "The search query"],
