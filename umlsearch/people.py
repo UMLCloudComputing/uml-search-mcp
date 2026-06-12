@@ -15,7 +15,7 @@ class PeopleSearchResultItem(TypedDict):
 
 
 async def query_people(query: str, top_k: int):
-    """Process search query from a provided url"""
+    """Process search query for a person at UMass Lowell"""
     url = SEARCH_URL + f"&query={query}"
 
     responses = {"total": 0, "results": {}}
