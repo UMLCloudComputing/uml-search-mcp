@@ -91,7 +91,7 @@ async def search_uml_news(
 # DONE
 @mcp_server.tool()
 async def parse_uml_url(url: Annotated[str, "The UMass Lowell domain URL to parse"]):
-    """Parse and return the markdown content from a URL from the UMass Lowell domain"""
+    """Parse and return content from a URL as markdown for much more detailed information"""
     result = await process_url(client, url, DOCLING_BASE_ADDRESS)
     return result
 
