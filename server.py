@@ -164,6 +164,6 @@ async def parse_uml_url(url: Annotated[str, "The UMass Lowell domain URL to pars
 
 if __name__ == "__main__":
     PORT = 8000
-    print(f"🔧 Starting the Prometheus metrics server on port: {PORT}")
-    start_http_server(port=PORT)
+    print("🔧 Starting the Prometheus metrics server on port: 9090")
+    start_http_server(port=9090)
     mcp_server.run(transport="streamable-http", host=BROADCAST_ADDRESS, port=PORT)
