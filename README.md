@@ -22,6 +22,19 @@ For production deployments on kubernetes check the reference manifest, `k8s/k8s_
 
 - Docker
 - MCP
+- Prometheus
 
 ## 🛠️ Tool Calls
+
 ![Tool Calls](./images/tool_calls.png)
+
+## 🔬 Metrics
+
+This MCP server exposes a Proemtheus `/metrics` endpoint which can be scraped for metrics
+
+The `k8s/` directory also contains a `ServiceMonitor` manifest to point a Prometheus instance on k8s to the MCP server.
+
+Application Metrics exposed:
+
+- `uml_search_mcp_tool_calls_total`: Total number of MCP tool executions for uml-search-mcp
+- `uml_search_mcp_tool_execution_seconds`: Time spent executing on MCP tool in seconds for uml-search-mcp
