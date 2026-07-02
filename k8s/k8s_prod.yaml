@@ -51,7 +51,7 @@ metadata:
   name: uml-search-mcp-svc
   namespace: mcp
   labels:
-    uml-search-mcp
+    app: uml-search-mcp
 spec:
   selector:
     pod: uml-search-mcp
