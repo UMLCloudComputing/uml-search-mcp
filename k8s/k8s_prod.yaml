@@ -10,6 +10,8 @@ kind: ConfigMap
 metadata:
   name: uml-search-mcp-configmap
   namespace: mcp
+  labels:
+    app: uml-search-mcp
 data:  
   DOCLING_BASE_ADDRESS: "192.168.1.207:5001"
 ---
@@ -18,6 +20,8 @@ kind: Deployment
 metadata:
   name: uml-search-mcp-deployment
   namespace: mcp
+  labels:
+    app: uml-search-mcp
 spec:
   replicas: 3 # Adjust to your needs
   selector: 
@@ -46,6 +50,8 @@ kind: Service
 metadata: 
   name: uml-search-mcp-svc
   namespace: mcp
+  labels:
+    uml-search-mcp
 spec:
   selector:
     pod: uml-search-mcp
@@ -58,7 +64,7 @@ spec:
     - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-    - name: http
+    - name: http-metrics
       protocol: TCP
       port: 8000
       targetPort: 8000
