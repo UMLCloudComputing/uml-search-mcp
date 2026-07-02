@@ -12,9 +12,9 @@ from fastmcp import FastMCP
 from fastmcp.server.lifespan import lifespan
 
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 
-from prometheus_client import Counter, Histogram, start_http_server
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
 from umlsearch import query_website, query_people, query_place, query_news, process_url
 
@@ -105,6 +105,14 @@ async def health_check(request: Request) -> JSONResponse:
     return JSONResponse({"status": "ok", "service": "uml-search-mcp"}, status_code=200)
 
 
+@mcp_server.custom_route("/metrics", methods=["GET"])
+async def metrics_endpoint(request: Request) -> Response:
+    """
+    Exposes the Prometheus metrics endpoint at `/metrics`
+    """
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
 # DONE
 @mcp_server.tool()
 @monitor_tool
@@ -164,6 +172,4 @@ async def parse_uml_url(url: Annotated[str, "The UMass Lowell domain URL to pars
 
 if __name__ == "__main__":
     PORT = 8000
-    print("🔧 Starting the Prometheus metrics server on port: 9090")
-    start_http_server(port=9090)
     mcp_server.run(transport="streamable-http", host=BROADCAST_ADDRESS, port=PORT)

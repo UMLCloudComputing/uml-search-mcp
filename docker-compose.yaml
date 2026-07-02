@@ -1,0 +1,14 @@
+services:
+  uml-search-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uml-search-mcp-server
+    network_mode: "host"
+    restart: on-failure
+  prometheus:
+    image: prom/prometheus
+    network_mode: "host"
+    volumes:
+      - "./prometheus.yaml:/etc/prometheus/prometheus.yml"
+
