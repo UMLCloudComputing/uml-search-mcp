@@ -72,7 +72,7 @@ def monitor_tool(func):
             raise
         finally:
             duration = time.perf_counter() - start_time
-            TOOL_EXECUTION_TIME.labels(tool_name, status).observe(duration)
+            TOOL_EXECUTION_TIME.labels(tool_name=tool_name, status=status).observe(duration)
             TOOL_CALLS_TOTAL.labels(tool_name=tool_name, status=status).inc()
 
     return async_wrapper if inspect.iscoroutinefunction(func) else sync_wrapper
@@ -118,7 +118,7 @@ async def metrics_endpoint(request: Request) -> Response:
 @monitor_tool
 async def search_uml_people(
     query: Annotated[str, "The search query"],
-    top_k: Annotated[int, "The number of results to provide"],
+    top_k: Annotated[int, "The number of results to provide"] = 3,
 ):
     """Search for people at UMass Lowell"""
     results = await query_people(query, top_k)
@@ -130,7 +130,7 @@ async def search_uml_people(
 @monitor_tool
 async def search_uml_website(
     query: Annotated[str, "The search query"],
-    top_k: Annotated[int, "The number of results to provide"],
+    top_k: Annotated[int, "The number of results to provide"] = 3,
 ):
     """Search the general UMass Lowell website"""
     results = await query_website(query, top_k)
@@ -142,7 +142,7 @@ async def search_uml_website(
 @monitor_tool
 async def search_uml_places(
     query: Annotated[str, "The search query"],
-    top_k: Annotated[int, "The number of results to provide"],
+    top_k: Annotated[int, "The number of results to provide"] = 3,
 ):
     """Search for places across UMass Lowell"""
     results = await query_place(query, top_k)
@@ -154,7 +154,7 @@ async def search_uml_places(
 @monitor_tool
 async def search_uml_news(
     query: Annotated[str, "The search query"],
-    top_k: Annotated[int, "The number of results to provide"],
+    top_k: Annotated[int, "The number of results to provide"] = 3,
 ):
     """Search for UMass Lowell news"""
     results = await query_news(query, top_k)
