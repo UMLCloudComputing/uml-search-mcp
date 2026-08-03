@@ -13,7 +13,7 @@ metadata:
   labels:
     app: uml-search-mcp
 data:  
-  DOCLING_BASE_ADDRESS: "192.168.1.207:5001"
+  DOCLING_BASE_ADDRESS: "192.168.1.145:5001"
 ---
 apiVersion: apps/v1
 kind: Deployment
